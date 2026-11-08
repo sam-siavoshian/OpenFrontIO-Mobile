@@ -670,10 +670,10 @@ export class ControlPanel extends LitElement implements Controller {
   private renderMobile() {
     return html`
       ${this.renderNotification()}
-      <div class="flex gap-2 items-center">
+      <div class="mobile-resource-bar flex gap-2 items-center">
         <!-- Gold -->
         <div
-          class="flex items-center justify-center p-1 gap-0.5 border rounded-md border-yellow-400 font-bold text-yellow-400 text-xs w-1/5 shrink-0 relative ${this.tutorialHighlightClass(
+          class="mobile-gold flex items-center justify-center p-1 gap-0.5 border rounded-md border-yellow-400 font-bold text-yellow-400 text-xs w-1/5 shrink-0 relative ${this.tutorialHighlightClass(
             "gold",
           )}"
           translate="no"
@@ -694,14 +694,16 @@ export class ControlPanel extends LitElement implements Controller {
         </div>
         <!-- Troop bar -->
         <div
-          class="w-[40%] shrink-0 flex items-center ${this.tutorialHighlightClass(
+          class="mobile-troops w-[40%] shrink-0 flex items-center ${this.tutorialHighlightClass(
             "troops",
           )}"
         >
           ${this.renderMobileTroopBar()}
         </div>
         <!-- Sword + % and troop count label -->
-        <div class="flex flex-col items-center justify-center shrink-0">
+        <div
+          class="mobile-attack-label flex flex-col items-center justify-center shrink-0"
+        >
           <div class="flex items-center gap-0.5">
             <img
               src=${swordIcon}
@@ -723,6 +725,7 @@ export class ControlPanel extends LitElement implements Controller {
           translate="no"
         >
           <input
+            aria-label=${translateText("mobile_controls.attack_ratio")}
             type="range"
             min="1"
             max="100"

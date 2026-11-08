@@ -544,6 +544,7 @@
 
     <!-- Bottom HUD: <sm=column, sm..lg=2col (HUD left | events right), lg+=3col grid centered -->
     <div
+      id="game-bottom-hud"
       class="fixed bottom-0 left-0 w-full z-[200] flex flex-col pointer-events-none sm:flex-row sm:items-end lg:grid lg:grid-cols-[1fr_500px_1fr] lg:items-end min-[1200px]:px-4"
       style="
         padding-bottom: env(safe-area-inset-bottom);
@@ -588,6 +589,7 @@
     <!-- Game modals and overlays -->
     <emoji-table></emoji-table>
     <build-menu></build-menu>
+    <mobile-controls></mobile-controls>
     <win-modal></win-modal>
     <onboarding-overlay></onboarding-overlay>
     <new-lobby-prompt></new-lobby-prompt>
@@ -597,6 +599,7 @@
          sidebar: the card is centered when it fits and shifts right or narrows
          to clear the open leaderboard instead of covering it. -->
     <div
+      id="game-top-hud"
       class="contents lg:fixed lg:top-0 lg:inset-x-0 lg:z-1000 lg:grid lg:grid-cols-[minmax(max-content,1fr)_minmax(0,max-content)_minmax(max-content,1fr)] lg:items-start lg:pointer-events-none"
     >
       <game-left-sidebar
@@ -606,6 +609,7 @@
         class="lg:col-start-2 lg:min-w-0"
       ></player-info-overlay>
       <div
+        id="game-top-actions"
         class="flex flex-col items-end gap-2 max-lg:fixed max-lg:top-0 max-lg:right-0 max-lg:z-1000 lg:col-start-3 lg:justify-self-end lg:pointer-events-auto"
       >
         <game-right-sidebar></game-right-sidebar>

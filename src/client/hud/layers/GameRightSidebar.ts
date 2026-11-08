@@ -407,9 +407,14 @@ export class GameRightSidebar extends LitElement implements Controller {
         <!-- Buttons -->
         ${this.maybeRenderReplayButtons()}
 
-        <div class="cursor-pointer" @click=${this.onSettingsButtonClick}>
+        <button
+          type="button"
+          class="cursor-pointer"
+          aria-label=${translateText("help_modal.option_settings")}
+          @click=${this.onSettingsButtonClick}
+        >
           <img src=${settingsIcon} alt="settings" width="20" height="20" />
-        </div>
+        </button>
 
         ${
           this.isShareable()
@@ -435,8 +440,10 @@ export class GameRightSidebar extends LitElement implements Controller {
         }
         ${
           document.fullscreenEnabled && !this.hideFullscreenButton
-            ? html`<div
+            ? html`<button
+                type="button"
                 class="cursor-pointer"
+                aria-label=${translateText(this.isFullscreen ? "fullscreen.exit" : "fullscreen.enter")}
                 @click=${this.onFullscreenButtonClick}
               >
                 <img
@@ -449,13 +456,18 @@ export class GameRightSidebar extends LitElement implements Controller {
                   width="20"
                   height="20"
                 />
-              </div>`
+              </button>`
             : ""
         }
 
-        <div class="cursor-pointer" @click=${this.onExitButtonClick}>
+        <button
+          type="button"
+          class="cursor-pointer"
+          aria-label=${translateText("help_modal.option_exit")}
+          @click=${this.onExitButtonClick}
+        >
           <img src=${exitIcon} alt="exit" width="20" height="20" />
-        </div>
+        </button>
       </aside>
       <doomsday-clock-panel
         .game=${this.game}
@@ -484,28 +496,39 @@ export class GameRightSidebar extends LitElement implements Controller {
       ${
         isReplayOrSingleplayer
           ? html`
-              <div class="cursor-pointer" @click=${this.toggleReplayPanel}>
+              <button
+                type="button"
+                class="cursor-pointer"
+                aria-label=${translateText("help_modal.option_speed")}
+                @click=${this.toggleReplayPanel}
+              >
                 <img
                   src=${FastForwardIconSolid}
                   alt="replay"
                   width="20"
                   height="20"
                 />
-              </div>
+              </button>
             `
           : ""
       }
       ${
         showPauseButton
           ? html`
-              <div class="cursor-pointer" @click=${this.onPauseButtonClick}>
+              <button
+                type="button"
+                class="cursor-pointer"
+                aria-label=${translateText("help_modal.option_pause")}
+                aria-pressed=${this.isPaused}
+                @click=${this.onPauseButtonClick}
+              >
                 <img
                   src=${this.isPaused ? playIcon : pauseIcon}
                   alt="play/pause"
                   width="20"
                   height="20"
                 />
-              </div>
+              </button>
             `
           : ""
       }

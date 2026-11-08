@@ -1,0 +1,351 @@
+/* Touch controls follow input capability, so tablets and folding phones retain
+   them even when their viewport crosses the desktop layout breakpoint. */
+.mobile-map-tools {
+  display: none;
+}
+.mobile-play-guide {
+  color: #f1f5f9;
+  background: #111e30;
+  border: 1px solid #41566f;
+  border-radius: 20px;
+  padding: 0;
+  width: min(520px, calc(100% - 24px));
+  max-height: calc(
+    100dvh - 24px - env(safe-area-inset-top) - env(safe-area-inset-bottom)
+  );
+  overscroll-behavior: contain;
+  box-shadow: 0 20px 80px #0009;
+}
+.mobile-play-guide::backdrop {
+  background: #020617b8;
+}
+.mobile-guide-content {
+  padding: 22px;
+}
+.mobile-guide-content header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+.mobile-guide-eyebrow {
+  color: #68c8ff;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  margin: 0 0 5px;
+}
+.mobile-guide-content h2 {
+  font-size: 24px;
+  font-weight: 800;
+  line-height: 1.2;
+  margin: 0;
+}
+.mobile-guide-content button {
+  min-width: 44px;
+  min-height: 44px;
+  border-radius: 12px;
+  cursor: pointer;
+  touch-action: manipulation;
+}
+.mobile-guide-content header button {
+  background: #26384e;
+  font-size: 26px;
+}
+.mobile-guide-content ol {
+  list-style: none;
+  padding: 0;
+  margin: 22px 0;
+  display: grid;
+  gap: 18px;
+}
+.mobile-guide-content li {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+}
+.mobile-guide-number {
+  display: grid;
+  place-items: center;
+  flex: 0 0 28px;
+  height: 28px;
+  background: #184269;
+  color: #8ed6ff;
+  border-radius: 9px;
+  font-size: 13px;
+  font-weight: 800;
+}
+.mobile-guide-content h3 {
+  margin: 0 0 4px;
+  font-size: 15px;
+  font-weight: 750;
+}
+.mobile-guide-content li p {
+  color: #b6c7d9;
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.5;
+}
+.mobile-guide-play {
+  width: 100%;
+  background: #0084d1;
+  color: white;
+  font-weight: 800;
+}
+.mobile-map-tools button:focus-visible,
+.mobile-guide-content button:focus-visible {
+  outline: 3px solid #8ed6ff;
+  outline-offset: 3px;
+}
+
+@media (pointer: coarse), (max-width: 767px) {
+  .mobile-map-tools {
+    position: fixed;
+    z-index: 190;
+    right: max(8px, env(safe-area-inset-right));
+    top: calc(76px + env(safe-area-inset-top));
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    padding: 4px;
+    border: 1px solid #50647b80;
+    border-radius: 16px;
+    background: #152338eb;
+    box-shadow: 0 4px 16px #0003;
+  }
+  .mobile-map-tools button {
+    display: grid;
+    place-items: center;
+    width: 44px;
+    height: 44px;
+    color: #e6f4ff;
+    font-size: 25px;
+    line-height: 1;
+    font-weight: 650;
+    border: 0;
+    border-radius: 11px;
+    background: transparent;
+    touch-action: manipulation;
+    cursor: pointer;
+  }
+  .mobile-map-tools button:active {
+    background: #2e5579;
+  }
+  /* Only the map consumes pan/pinch. Documents and dialogs remain scrollable. */
+  #game-input-overlay {
+    touch-action: none;
+    user-select: none;
+    -webkit-touch-callout: none;
+  }
+  #game-top-hud {
+    top: env(safe-area-inset-top);
+    padding-left: env(safe-area-inset-left);
+    padding-right: env(safe-area-inset-right);
+  }
+  #game-top-actions {
+    top: env(safe-area-inset-top);
+    right: env(safe-area-inset-right);
+  }
+  game-left-sidebar > aside {
+    top: env(safe-area-inset-top);
+    left: env(safe-area-inset-left);
+  }
+  game-left-sidebar [role="button"],
+  game-right-sidebar aside > .cursor-pointer,
+  game-right-sidebar aside > button,
+  game-right-sidebar aside > div:has(> .cursor-pointer) > .cursor-pointer {
+    min-width: 44px;
+    min-height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  game-right-sidebar aside {
+    gap: 0;
+    padding: 4px;
+  }
+  game-left-sidebar > aside {
+    padding: 4px;
+    max-height: calc(100dvh - 130px);
+  }
+  game-left-sidebar > aside > div:first-child {
+    gap: 4px;
+  }
+  /* A swipeable hotbar keeps every action finger-sized on phones/tablets. */
+  unit-display .unit-display-scroll {
+    overflow-x: auto;
+    overflow-y: hidden;
+  }
+  unit-display .unit-display-grid {
+    grid-template-columns: none;
+    grid-template-rows: 1fr;
+    grid-auto-flow: column;
+    grid-auto-columns: 48px;
+    width: max-content;
+    min-width: 100%;
+    gap: 4px;
+  }
+  unit-display .unit-build-action {
+    min-width: 44px;
+    min-height: 44px;
+    height: auto;
+    justify-content: center;
+  }
+  unit-display .unit-display-hotkey {
+    display: none;
+  }
+  unit-display .unit-build-action:focus-visible {
+    outline: 3px solid #8ed6ff;
+    outline-offset: -3px;
+  }
+
+  /* Keep the map exposed on phones: put resources above a full width slider. */
+  control-panel .mobile-resource-bar {
+    display: grid;
+    grid-template-columns: minmax(72px, 1fr) minmax(0, 2fr);
+    gap: 4px 12px;
+  }
+  control-panel .mobile-gold {
+    width: auto;
+    min-height: 28px;
+    font-size: 13px;
+  }
+  control-panel .mobile-troops {
+    width: auto;
+  }
+  control-panel .mobile-attack-label {
+    align-items: flex-start;
+  }
+  control-panel .mobile-attack-label span {
+    white-space: normal;
+    font-size: 12px;
+  }
+  control-panel input[type="range"] {
+    appearance: none;
+    width: 100%;
+    height: 44px;
+    margin: 0;
+    background: transparent;
+    touch-action: pan-x;
+  }
+  control-panel input[type="range"]::-webkit-slider-runnable-track {
+    height: 6px;
+    border-radius: 4px;
+    background: #627990;
+  }
+  control-panel input[type="range"]::-moz-range-track {
+    height: 6px;
+    border-radius: 4px;
+    background: #627990;
+  }
+  control-panel input[type="range"]::-webkit-slider-thumb {
+    appearance: none;
+    width: 26px;
+    height: 26px;
+    margin-top: -10px;
+    border: 3px solid #d3efff;
+    border-radius: 50%;
+    background: #0084d1;
+  }
+  control-panel input[type="range"]::-moz-range-thumb {
+    width: 22px;
+    height: 22px;
+    border: 3px solid #d3efff;
+    border-radius: 50%;
+    background: #0084d1;
+  }
+  input:not([type="range"]):not([type="checkbox"]):not([type="radio"]),
+  textarea,
+  select {
+    font-size: max(16px, 1em);
+  }
+}
+
+@media (max-width: 360px) {
+  .mobile-map-tools {
+    top: calc(112px + env(safe-area-inset-top));
+  }
+}
+
+@media (max-width: 420px) {
+  /* Top actions can wrap rather than collide with the leaderboard button. */
+  game-right-sidebar aside {
+    max-width: calc(
+      100vw - 64px - env(safe-area-inset-left) - env(safe-area-inset-right)
+    );
+    flex-wrap: wrap;
+    justify-content: flex-end;
+  }
+}
+
+@media (pointer: coarse) and (max-height: 500px) and (min-width: 600px) {
+  .mobile-map-tools {
+    top: auto;
+    bottom: calc(12px + env(safe-area-inset-bottom));
+    flex-direction: row;
+  }
+  #game-bottom-hud > div:first-child {
+    width: min(440px, 58vw);
+  }
+  #game-bottom-hud > div:last-child {
+    padding-bottom: 64px;
+  }
+  .mobile-guide-content {
+    padding: 16px 22px;
+  }
+  .mobile-guide-content ol {
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+  }
+  .mobile-play-guide {
+    width: min(720px, calc(100% - 24px));
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mobile-map-tools *,
+  .mobile-play-guide * {
+    scroll-behavior: auto;
+    transition: none;
+  }
+}
+
+/* On short portrait screens the camera strip must clear both the wrapped
+   top actions and the tutorial, rather than losing Help underneath the HUD. */
+@media (max-width: 600px) and (max-height: 700px) {
+  .mobile-map-tools {
+    top: calc(104px + env(safe-area-inset-top));
+    flex-direction: row;
+  }
+}
+@media (pointer: coarse), (max-width: 767px) {
+  tutorial-panel button {
+    min-width: 44px;
+    min-height: 44px;
+  }
+  tutorial-panel > div > div:first-child {
+    flex-wrap: wrap;
+  }
+  tutorial-panel > div > div:first-child > span:last-child {
+    flex-wrap: wrap;
+  }
+}
+@media (max-height: 700px) and (pointer: coarse) {
+  tutorial-panel > div {
+    max-height: 136px;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+  }
+  tutorial-panel > div > div:first-child > span:first-child {
+    display: none;
+  }
+  tutorial-panel > div > div:first-child > span:last-child {
+    flex: 1;
+    justify-content: space-between;
+  }
+  tutorial-panel p {
+    font-size: 14px;
+    line-height: 1.4;
+  }
+}

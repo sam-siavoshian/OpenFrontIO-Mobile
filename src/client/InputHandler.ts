@@ -1177,7 +1177,7 @@ export class InputHandler {
           );
         }, this.LONG_PRESS_MS);
       }
-    } else if (this.pointers.size === 2) {
+    } else if (this.pointers.size >= 2) {
       // Second finger down — cancel any pending long-press to avoid
       // triggering selection mode mid-pinch
       if (this.longPressTimer !== null) {
@@ -1280,6 +1280,23 @@ export class InputHandler {
     // The release listener is global so map drags can end over the HUD. A HUD
     // click has no matching map pointerdown and must not reuse stale map state.
     if (!this.pointerDown || !this.pointers.has(event.pointerId)) {
+      return;
+    }
+    // Keep the remaining finger tracked after a pinch. It can immediately
+    // continue panning, but no release in this gesture may attack or build.
+    if (this.pointers.size > 1) {
+      this.pointers.delete(event.pointerId);
+      const remaining = this.pointers.values().next().value!;
+      this.lastPointerX = this.lastPointerDownX = remaining.clientX;
+      this.lastPointerY = this.lastPointerDownY = remaining.clientY;
+      this.lastPinchDistance =
+        this.pointers.size >= 2 ? this.getPinchDistance() : 0;
+      this.suppressNextTap = true;
+      if (this.selectionBoxActive) {
+        this.selectionBoxActive = false;
+        this.eventBus.emit(new WarshipSelectionBoxCancelEvent());
+      }
+      event.preventDefault();
       return;
     }
     this.pointerDown = false;
@@ -1520,6 +1537,8 @@ export class InputHandler {
       }
       return;
     }
+    const previousPinchCenter =
+      this.pointers.size === 2 ? this.getPinchCenter() : null;
     this.pointers.set(event.pointerId, event);
 
     if (this.pointers.size === 1) {
@@ -1575,15 +1594,26 @@ export class InputHandler {
       this.lastPointerY = event.clientY;
     } else if (this.pointers.size === 2) {
       const currentPinchDistance = this.getPinchDistance();
-      const pinchDelta = currentPinchDistance - this.lastPinchDistance;
-
-      if (Math.abs(pinchDelta) > 1) {
-        const zoomCenter = this.getPinchCenter();
+      const zoomCenter = this.getPinchCenter();
+      if (previousPinchCenter) {
         this.eventBus.emit(
-          new ZoomEvent(zoomCenter.x, zoomCenter.y, -pinchDelta * 2),
+          new DragEvent(
+            zoomCenter.x - previousPinchCenter.x,
+            zoomCenter.y - previousPinchCenter.y,
+          ),
         );
-        this.lastPinchDistance = currentPinchDistance;
       }
+      // Match the fingers' scale ratio at every zoom level and screen size.
+      // Pixel deltas made the same pinch behave differently on large tablets.
+      if (this.lastPinchDistance > 0 && currentPinchDistance > 0) {
+        const delta =
+          ZOOM_DELTA_DIVISOR *
+          (this.lastPinchDistance / currentPinchDistance - 1);
+        if (delta !== 0) {
+          this.eventBus.emit(new ZoomEvent(zoomCenter.x, zoomCenter.y, delta));
+        }
+      }
+      this.lastPinchDistance = currentPinchDistance;
     }
   }
 

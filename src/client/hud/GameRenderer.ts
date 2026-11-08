@@ -37,6 +37,8 @@ import { HeadsUpMessage } from "./layers/HeadsUpMessage";
 import { ImmunityTimer } from "./layers/ImmunityTimer";
 import { InGamePromo } from "./layers/InGamePromo";
 import { MainRadialMenu } from "./layers/MainRadialMenu";
+import "./layers/MobileControls";
+import type { MobileControls } from "./layers/MobileControls";
 import { MultiTabModal } from "./layers/MultiTabModal";
 import { NewLobbyPrompt } from "./layers/NewLobbyPrompt";
 import { OnboardingOverlay } from "./layers/OnboardingOverlay";
@@ -332,7 +334,13 @@ export function createRenderer(
   onboardingOverlay.transformHandler = transformHandler;
   onboardingOverlay.uiState = uiState;
 
+  const mobileControls = document.querySelector(
+    "mobile-controls",
+  ) as MobileControls;
+  mobileControls.eventBus = eventBus;
+
   const layers: Controller[] = [
+    mobileControls,
     new WarshipSelectionController(game, eventBus, transformHandler, view),
     new BuildPreviewController(
       game,
@@ -421,6 +429,7 @@ export class GameRenderer {
   }
 
   dispose() {
+    document.querySelector<MobileControls>("mobile-controls")?.hide();
     window.removeEventListener("resize", this.onResize);
   }
 

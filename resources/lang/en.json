@@ -3085,5 +3085,29 @@
     "you_won": "You Won!",
     "your_team": "Your team won!",
     "youtube_tutorial": "Need some help?"
+  },
+  "mobile_controls": {
+    "title": "Map controls",
+    "eyebrow": "OpenFront • touch guide",
+    "help": "How to play on mobile",
+    "zoom_in": "Zoom in",
+    "zoom_out": "Zoom out",
+    "recenter": "Return to your territory",
+    "fleet": "Select all warships",
+    "close": "Close guide",
+    "play": "Let’s play",
+    "attack_ratio": "Troops to send (%)",
+    "spawn_title": "Choose your starting spot",
+    "spawn": "Tap unclaimed land to spawn. Leave room to expand and look for a nearby coast.",
+    "move_title": "Explore the map",
+    "move": "Drag with one finger to pan. Pinch with two fingers to zoom, or use + and −. Tap ⌖ to return home.",
+    "attack_title": "Expand your territory",
+    "attack": "Tap nearby land, then tap the sword in the action menu to attack. The bottom slider sets the percentage of troops to send.",
+    "build_title": "Build and upgrade",
+    "build": "Tap your land and choose a building from the action menu. Tap to position its preview, then tap the preview again to build. Swipe the bottom build bar to see every unit.",
+    "diplomacy_title": "Work with other players",
+    "diplomacy": "Tap another player’s land to see available actions: alliances, donations, targeting, chat and emoji.",
+    "ships_title": "Command your fleet",
+    "ships": "Tap a warship, then tap water to move it. Hold and drag to select a group, or tap ⚑ to select all your warships."
   }
 }

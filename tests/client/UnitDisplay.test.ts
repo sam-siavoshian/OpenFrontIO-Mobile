@@ -160,7 +160,9 @@ describe("mobile UnitDisplay layout", () => {
     const { display } = makeDisplay();
     try {
       await display.updateComplete;
-      const cityButton = display.querySelector(".unit-display-grid > * > div");
+      const cityButton = display.querySelector(
+        ".unit-display-grid > * > button",
+      );
 
       expect(cityButton?.classList.contains("hover:bg-gray-800")).toBe(false);
       expect(
@@ -240,7 +242,7 @@ describe("mobile UnitDisplay layout", () => {
         );
         dispatchTouch(cityItem, "touchend", 42);
         cityItem
-          .querySelector("div > div")
+          .querySelector(".unit-build-action")
           ?.dispatchEvent(new MouseEvent("click", { bubbles: true }));
         expect(inputHandler.setGhostStructure).not.toHaveBeenCalled();
       } finally {
@@ -281,7 +283,7 @@ describe("mobile UnitDisplay layout", () => {
           }),
         );
         cityItem
-          .querySelector("div > div")
+          .querySelector(".unit-build-action")
           ?.dispatchEvent(new MouseEvent("click", { bubbles: true }));
 
         expect(inputHandler.setGhostStructure).toHaveBeenCalledWith(
@@ -309,7 +311,9 @@ describe("mobile UnitDisplay layout", () => {
         await display.updateComplete;
         const cityItem = display.querySelector(".unit-display-grid")
           ?.firstElementChild as HTMLElement;
-        const button = cityItem.querySelector("div > div") as HTMLElement;
+        const button = cityItem.querySelector(
+          ".unit-build-action",
+        ) as HTMLElement;
         cityItem.dispatchEvent(
           new PointerEvent("pointerdown", {
             button: 0,
@@ -352,7 +356,7 @@ describe("mobile UnitDisplay layout", () => {
       eventBus.on(ToggleStructureEvent, (event) => highlights.push(event));
       await display.updateComplete;
       const item = display.querySelectorAll(".unit-display-grid > *")[5];
-      const button = item.querySelector("div > div") as HTMLElement;
+      const button = item.querySelector(".unit-build-action") as HTMLElement;
 
       const tap = () =>
         button.dispatchEvent(
@@ -389,7 +393,7 @@ describe("mobile UnitDisplay layout", () => {
       eventBus.on(ToggleStructureEvent, (event) => highlights.push(event));
       await display.updateComplete;
       const button = display.querySelectorAll(
-        ".unit-display-grid > * > div > div",
+        ".unit-display-grid > * > button > div",
       )[0] as HTMLElement;
 
       button.dispatchEvent(
@@ -436,7 +440,7 @@ describe("mobile UnitDisplay layout", () => {
       );
       await display.updateComplete;
       const button = display.querySelector(
-        ".unit-display-grid > * > div > div",
+        ".unit-display-grid > * > button > div",
       ) as HTMLElement;
       const click = new MouseEvent("click", { bubbles: true });
       Object.defineProperty(click, FORWARDED_TOUCH_CLICK, { value: true });
@@ -547,7 +551,7 @@ describe("mobile UnitDisplay layout", () => {
           }),
         );
         cityItem
-          .querySelector("div > div")
+          .querySelector(".unit-build-action")
           ?.dispatchEvent(new MouseEvent("click", { bubbles: true }));
 
         expect(inputHandler.setGhostStructure).toHaveBeenCalledWith(
@@ -793,7 +797,9 @@ describe("mobile UnitDisplay layout", () => {
         await display.updateComplete;
         const cityItem = display.querySelector(".unit-display-grid")
           ?.firstElementChild as HTMLElement;
-        const button = cityItem.querySelector("div > div") as HTMLElement;
+        const button = cityItem.querySelector(
+          ".unit-build-action",
+        ) as HTMLElement;
         cityItem.dispatchEvent(
           new PointerEvent("pointerdown", {
             button: 0,
@@ -848,7 +854,9 @@ describe("mobile UnitDisplay layout", () => {
       await display.updateComplete;
       const cityItem = display.querySelector(".unit-display-grid")
         ?.firstElementChild as HTMLElement;
-      const button = cityItem.querySelector("div > div") as HTMLElement;
+      const button = cityItem.querySelector(
+        ".unit-build-action",
+      ) as HTMLElement;
       button.dispatchEvent(
         new PointerEvent("pointerenter", {
           pointerId: 1,

@@ -626,8 +626,20 @@ export class UnitDisplay extends LitElement implements Controller {
         @pointerdown=${(event: PointerEvent) =>
           this.startPeek(event, unitType, structureKey, hotkey)}
       >
-        <div
-          class="${
+        <button
+          type="button"
+          aria-label=${translateText("unit_type." + structureKey)}
+          aria-pressed=${selected}
+          aria-disabled=${!this.canBuild(unitType)}
+          @keydown=${(event: KeyboardEvent) => {
+            if (event.key === " " || event.key === "Enter")
+              event.stopPropagation();
+          }}
+          @keyup=${(event: KeyboardEvent) => {
+            if (event.key === " " || event.key === "Enter")
+              event.stopPropagation();
+          }}
+          class="unit-build-action ${
             this.canBuild(unitType) ? "" : "opacity-40"
           } border border-slate-500 rounded-sm max-lg:h-7.5 w-full px-1 pb-0.5 flex items-center justify-center gap-0.5 cursor-pointer lg:px-0.5 lg:justify-start landscape:px-0.5
              ${
@@ -714,7 +726,7 @@ export class UnitDisplay extends LitElement implements Controller {
                 : null
             }
           </div>
-        </div>
+        </button>
       </div>
     `;
   }

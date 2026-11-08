@@ -182,7 +182,10 @@ export class BuildMenu extends LitElement implements Controller {
       flex-direction: column;
       align-items: center;
       max-width: 95vw;
-      max-height: 95vh;
+      max-height: calc(
+        100dvh - 24px - env(safe-area-inset-top) - env(safe-area-inset-bottom)
+      );
+      overscroll-behavior: contain;
       overflow-y: auto;
     }
     .build-description {
@@ -284,7 +287,7 @@ export class BuildMenu extends LitElement implements Controller {
     @media (max-width: 768px) {
       .build-menu {
         padding: 10px;
-        max-height: 80vh;
+        max-height: 80dvh;
         width: 80vw;
       }
       .build-button {
@@ -316,11 +319,12 @@ export class BuildMenu extends LitElement implements Controller {
     @media (max-width: 480px) {
       .build-menu {
         padding: 8px;
-        max-height: 70vh;
+        max-height: 70dvh;
       }
       .build-button {
         width: calc(50% - 6px);
-        height: 100px;
+        height: auto;
+        min-height: 126px;
         margin: 3px;
         padding: 4px;
         border-width: 1px;
@@ -329,15 +333,15 @@ export class BuildMenu extends LitElement implements Controller {
         font-size: 24px;
       }
       .build-name {
-        font-size: 10px;
+        font-size: 12px;
         margin-bottom: 2px;
       }
       .build-cost {
-        font-size: 9px;
+        font-size: 11px;
       }
       .build-count {
         font-weight: bold;
-        font-size: 8px;
+        font-size: 10px;
       }
       .build-count-chip {
         padding: 0 3px;
