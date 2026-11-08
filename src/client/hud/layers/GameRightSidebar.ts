@@ -462,7 +462,7 @@ export class GameRightSidebar extends LitElement implements Controller {
 
         <button
           type="button"
-          class="cursor-pointer"
+          class="game-exit-action cursor-pointer"
           aria-label=${translateText("help_modal.option_exit")}
           @click=${this.onExitButtonClick}
         >

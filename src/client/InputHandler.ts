@@ -388,6 +388,8 @@ export class InputHandler {
   private longPressTimer: ReturnType<typeof setTimeout> | null = null;
   private longPressActive: boolean = false;
   private suppressNextTap: boolean = false;
+  // Latch travel: a pan that returns to its origin is still not a tap.
+  private contactDragged = false;
   private touchPlacementDragState: "idle" | "candidate" | "active" = "idle";
   private readonly LONG_PRESS_MS = 800;
 
@@ -506,6 +508,7 @@ export class InputHandler {
     }
     this.longPressActive = false;
     this.suppressNextTap = false;
+    this.contactDragged = false;
     this.touchPlacementDragState = "idle";
     this.selectionBoxActive = false;
     this.multiSelectionActive = false;
@@ -1137,6 +1140,7 @@ export class InputHandler {
       // A new gesture starts clean: a tap suppression from an earlier
       // gesture (eg. a pinch) must not swallow this one's tap.
       this.suppressNextTap = false;
+      this.contactDragged = false;
 
       this.eventBus.emit(new MouseDownEvent(event.clientX, event.clientY));
 
@@ -1299,6 +1303,8 @@ export class InputHandler {
       event.preventDefault();
       return;
     }
+    const wasContactDrag = this.contactDragged;
+    this.contactDragged = false;
     this.pointerDown = false;
     this.pointers.clear();
 
@@ -1360,6 +1366,15 @@ export class InputHandler {
       } else {
         this.eventBus.emit(new WarshipSelectionBoxCancelEvent());
       }
+    }
+
+    if (
+      (event.pointerType === "touch" || event.pointerType === "pen") &&
+      wasContactDrag
+    ) {
+      this.suppressNextTap = false;
+      event.preventDefault();
+      return;
     }
 
     // macOS treats Ctrl+Left as secondary-click (context menu). Skip the
@@ -1547,6 +1562,13 @@ export class InputHandler {
       const moveDist =
         Math.abs(event.clientX - this.lastPointerDownX) +
         Math.abs(event.clientY - this.lastPointerDownY);
+
+      if (
+        (event.pointerType === "touch" || event.pointerType === "pen") &&
+        moveDist >= this.DRAG_THRESHOLD_PX
+      ) {
+        this.contactDragged = true;
+      }
 
       if (
         this.touchPlacementDragState === "candidate" &&

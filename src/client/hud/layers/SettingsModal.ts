@@ -9,6 +9,7 @@ import { PauseGameIntentEvent } from "src/client/Transport";
 import { responseHasLinkedIdentity } from "../../AccountIdentity";
 import { ClientEnv } from "../../ClientEnv";
 import { Controller } from "../../Controller";
+import { showInGameConfirm } from "../../InGameModal";
 import {
   AlternateViewEvent,
   ToggleRenderDebugGuiEvent,
@@ -274,9 +275,22 @@ export class SettingsModal extends LitElement implements Controller {
     `;
   }
 
-  private onExitButtonClick() {
-    // redirect to the home page
-    window.location.href = homeHref();
+  private exitPending = false;
+
+  private async onExitButtonClick() {
+    if (this.exitPending) return;
+    this.exitPending = true;
+    try {
+      if (this.game?.myPlayer()?.isAlive() || this.game?.inSpawnPhase()) {
+        const confirmed = await showInGameConfirm(
+          translateText("help_modal.exit_confirmation"),
+        );
+        if (!confirmed) return;
+      }
+      window.location.href = homeHref();
+    } finally {
+      this.exitPending = false;
+    }
   }
 
   private renderModifiers() {

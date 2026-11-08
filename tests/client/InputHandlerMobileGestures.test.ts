@@ -98,6 +98,26 @@ describe("mobile map gestures", () => {
     expect(builds).toHaveLength(0);
   });
 
+  it.each([false, true])(
+    "never treats a pan returning to its start as a tap (building: %s)",
+    (building) => {
+      const builds: TouchGhostPlacementEvent[] = [];
+      bus.on(TouchGhostPlacementEvent, (e) => builds.push(e));
+      if (building)
+        handler.uiState.ghostStructure = "City" as UIState["ghostStructure"];
+      pointer(canvas, "pointerdown", 1, 100, 100);
+      pointer(window, "pointermove", 1, 150, 100);
+      pointer(window, "pointermove", 1, 100, 100);
+      pointer(window, "pointerup", 1, 100, 100);
+      expect(taps).toHaveLength(0);
+      expect(builds).toHaveLength(0);
+      // The next deliberate tap still works.
+      pointer(canvas, "pointerdown", 2, 100, 100);
+      pointer(window, "pointerup", 2, 100, 100);
+      expect(building ? builds : taps).toHaveLength(1);
+    },
+  );
+
   it("cancels without turning a system-interrupted gesture into a tap", () => {
     pointer(canvas, "pointerdown", 1, 100, 100);
     pointer(window, "pointercancel", 1, 100, 100);

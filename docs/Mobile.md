@@ -4,18 +4,17 @@ OpenFrontIO-Mobile keeps the full game on the map in portrait and landscape.
 Touch controls remain available on wide tablets and folding screens.
 
 1. Choose **Solo** or a lobby. Tap unclaimed land to spawn.
-2. Drag to pan. Pinch to zoom, or use **+ / −**. The crosshair returns to your territory.
+2. Drag to pan. Pinch to zoom, or tap **±** for zoom buttons. The crosshair returns to your territory.
 3. Tap nearby land, then tap the central sword to attack. Adjust the bottom slider to choose the troop percentage.
 4. Swipe the build bar to find a unit. Hold an icon to inspect its cost. Tap an available building, position its preview, and tap the preview again to confirm. Drag the preview to adjust its position.
 5. Tap another player's land for diplomacy, donations, chat, emoji, and other available actions.
-6. Tap a ship and then water to move it. Hold and drag for a group, or use the flag button to select all warships.
-7. Tap **?** for the touch guide. Settings, pause/speed (where permitted), sharing, and exit remain in the top bar.
+6. Tap a ship and then water to move it. Hold and drag for a group, or open **⋯** to select all warships.
+7. Open **⋯** for the touch guide. Tap **Show tip** to expand the current tutorial step. Settings, pause/speed (where permitted), and sharing remain in the top bar; Exit is inside Settings and asks for confirmation during play.
 
 The interface accounts for safe areas, dynamic viewport height, touch input,
 small-screen scrolling, keyboard focus, and reduced motion. Map gestures are
 separate from scrollable panels. Build buttons have accessible names and states.
-On short screens the camera buttons form a horizontal strip to stay clear of
-the tutorial and resource controls.
+On short screens the camera buttons form a horizontal strip. The three-button camera strip and collapsed tips leave more map exposed without shrinking touch targets. Panning away and back cannot become a tap, and dragging across a camera button cancels that press.
 
 ## Verification
 
