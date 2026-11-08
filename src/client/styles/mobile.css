@@ -320,6 +320,10 @@
     background: #152338;
     box-shadow: 0 6px 18px #0004;
   }
+  /* Popovers clear passive HUD messages, but stay below game dialogs. */
+  .mobile-map-tools:has(.mobile-tool-popover:not([hidden])) {
+    z-index: 1100;
+  }
   .mobile-tool-popover[hidden] {
     display: none;
   }
