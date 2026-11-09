@@ -1126,6 +1126,17 @@ export class UsernameInput extends LitElement {
         type="text"
         .value=${this.baseUsername}
         @input=${this.handleUsernameChange}
+        @keydown=${(event: KeyboardEvent) => {
+          if (event.key === "Enter" && !event.isComposing) {
+            event.preventDefault();
+            (event.currentTarget as HTMLInputElement).blur();
+          }
+        }}
+        autocomplete="nickname"
+        autocapitalize="off"
+        autocorrect="off"
+        spellcheck="false"
+        enterkeyhint="done"
         placeholder="${translateText("username.enter_username")}"
         minlength="${MIN_USERNAME_LENGTH}"
         maxlength="${MAX_USERNAME_LENGTH}"

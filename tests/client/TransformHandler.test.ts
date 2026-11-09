@@ -62,3 +62,37 @@ describe("TransformHandler", () => {
     });
   });
 });
+
+describe("viewport rotation", () => {
+  it.each([1, 1.8, 4])(
+    "preserves the world center at zoom %s through both orientations",
+    (scale) => {
+      const canvas = document.createElement("canvas");
+      let rect = new DOMRect(0, 0, 390, 844);
+      vi.spyOn(canvas, "getBoundingClientRect").mockImplementation(() => rect);
+      const game = { width: () => 1000, height: () => 500 } as GameView;
+      const handler = new TransformHandler(game, new EventBus(), canvas);
+      handler.override(-120, 40, scale);
+      const center = handler.screenToWorldCoordinatesFloat(195, 422);
+      handler.resetChanged();
+      rect = new DOMRect(0, 0, 844, 390);
+      handler.updateCanvasBoundingRect();
+      expect(handler.screenToWorldCoordinatesFloat(422, 195)).toEqual(center);
+      expect(handler.scale).toBe(scale);
+      expect(handler.hasChanged()).toBe(true);
+      rect = new DOMRect(0, 0, 390, 844);
+      handler.updateCanvasBoundingRect();
+      const restored = handler.screenToWorldCoordinatesFloat(195, 422);
+      expect(restored.x).toBeCloseTo(center.x);
+      expect(restored.y).toBeCloseTo(center.y);
+    },
+  );
+
+  it("does not move the camera for an unchanged viewport or initial zero size", () => {
+    const { handler } = makeHandler();
+    handler.updateCanvasBoundingRect();
+    expect(handler.offsetX).toBe(-350);
+    expect(handler.offsetY).toBe(-200);
+    expect(handler.hasChanged()).toBe(false);
+  });
+});

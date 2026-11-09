@@ -388,6 +388,8 @@ export class InputHandler {
   private longPressTimer: ReturnType<typeof setTimeout> | null = null;
   private longPressActive: boolean = false;
   private suppressNextTap: boolean = false;
+  // Latch travel: a pan that returns to its origin is still not a tap.
+  private contactDragged = false;
   private touchPlacementDragState: "idle" | "candidate" | "active" = "idle";
   private readonly LONG_PRESS_MS = 800;
 
@@ -506,6 +508,7 @@ export class InputHandler {
     }
     this.longPressActive = false;
     this.suppressNextTap = false;
+    this.contactDragged = false;
     this.touchPlacementDragState = "idle";
     this.selectionBoxActive = false;
     this.multiSelectionActive = false;
@@ -1137,6 +1140,7 @@ export class InputHandler {
       // A new gesture starts clean: a tap suppression from an earlier
       // gesture (eg. a pinch) must not swallow this one's tap.
       this.suppressNextTap = false;
+      this.contactDragged = false;
 
       this.eventBus.emit(new MouseDownEvent(event.clientX, event.clientY));
 
@@ -1177,7 +1181,7 @@ export class InputHandler {
           );
         }, this.LONG_PRESS_MS);
       }
-    } else if (this.pointers.size === 2) {
+    } else if (this.pointers.size >= 2) {
       // Second finger down — cancel any pending long-press to avoid
       // triggering selection mode mid-pinch
       if (this.longPressTimer !== null) {
@@ -1282,6 +1286,25 @@ export class InputHandler {
     if (!this.pointerDown || !this.pointers.has(event.pointerId)) {
       return;
     }
+    // Keep the remaining finger tracked after a pinch. It can immediately
+    // continue panning, but no release in this gesture may attack or build.
+    if (this.pointers.size > 1) {
+      this.pointers.delete(event.pointerId);
+      const remaining = this.pointers.values().next().value!;
+      this.lastPointerX = this.lastPointerDownX = remaining.clientX;
+      this.lastPointerY = this.lastPointerDownY = remaining.clientY;
+      this.lastPinchDistance =
+        this.pointers.size >= 2 ? this.getPinchDistance() : 0;
+      this.suppressNextTap = true;
+      if (this.selectionBoxActive) {
+        this.selectionBoxActive = false;
+        this.eventBus.emit(new WarshipSelectionBoxCancelEvent());
+      }
+      event.preventDefault();
+      return;
+    }
+    const wasContactDrag = this.contactDragged;
+    this.contactDragged = false;
     this.pointerDown = false;
     this.pointers.clear();
 
@@ -1343,6 +1366,15 @@ export class InputHandler {
       } else {
         this.eventBus.emit(new WarshipSelectionBoxCancelEvent());
       }
+    }
+
+    if (
+      (event.pointerType === "touch" || event.pointerType === "pen") &&
+      wasContactDrag
+    ) {
+      this.suppressNextTap = false;
+      event.preventDefault();
+      return;
     }
 
     // macOS treats Ctrl+Left as secondary-click (context menu). Skip the
@@ -1520,6 +1552,8 @@ export class InputHandler {
       }
       return;
     }
+    const previousPinchCenter =
+      this.pointers.size === 2 ? this.getPinchCenter() : null;
     this.pointers.set(event.pointerId, event);
 
     if (this.pointers.size === 1) {
@@ -1528,6 +1562,13 @@ export class InputHandler {
       const moveDist =
         Math.abs(event.clientX - this.lastPointerDownX) +
         Math.abs(event.clientY - this.lastPointerDownY);
+
+      if (
+        (event.pointerType === "touch" || event.pointerType === "pen") &&
+        moveDist >= this.DRAG_THRESHOLD_PX
+      ) {
+        this.contactDragged = true;
+      }
 
       if (
         this.touchPlacementDragState === "candidate" &&
@@ -1575,15 +1616,26 @@ export class InputHandler {
       this.lastPointerY = event.clientY;
     } else if (this.pointers.size === 2) {
       const currentPinchDistance = this.getPinchDistance();
-      const pinchDelta = currentPinchDistance - this.lastPinchDistance;
-
-      if (Math.abs(pinchDelta) > 1) {
-        const zoomCenter = this.getPinchCenter();
+      const zoomCenter = this.getPinchCenter();
+      if (previousPinchCenter) {
         this.eventBus.emit(
-          new ZoomEvent(zoomCenter.x, zoomCenter.y, -pinchDelta * 2),
+          new DragEvent(
+            zoomCenter.x - previousPinchCenter.x,
+            zoomCenter.y - previousPinchCenter.y,
+          ),
         );
-        this.lastPinchDistance = currentPinchDistance;
       }
+      // Match the fingers' scale ratio at every zoom level and screen size.
+      // Pixel deltas made the same pinch behave differently on large tablets.
+      if (this.lastPinchDistance > 0 && currentPinchDistance > 0) {
+        const delta =
+          ZOOM_DELTA_DIVISOR *
+          (this.lastPinchDistance / currentPinchDistance - 1);
+        if (delta !== 0) {
+          this.eventBus.emit(new ZoomEvent(zoomCenter.x, zoomCenter.y, delta));
+        }
+      }
+      this.lastPinchDistance = currentPinchDistance;
     }
   }
 

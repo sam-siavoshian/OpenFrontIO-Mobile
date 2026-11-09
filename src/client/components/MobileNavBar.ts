@@ -1,6 +1,8 @@
 import { assetUrl } from "@openfront/shared/AssetUrls";
 import { html, LitElement, TemplateResult } from "lit";
 import { customElement } from "lit/decorators.js";
+import { closeMobileSidebar } from "../Navigation";
+import { translateText } from "../Utils";
 import { NavNotificationsController } from "./NavNotificationsController";
 
 const MOBILE_ITEM =
@@ -67,6 +69,17 @@ export class MobileNavBar extends LitElement {
     const currentPage = window.currentPageId;
 
     return html`
+      <button
+        type="button"
+        class="mobile-sidebar-close"
+        aria-label=${translateText("mobile_controls.close_menu")}
+        @click=${() => {
+          closeMobileSidebar();
+          document.getElementById("hamburger-btn")?.focus();
+        }}
+      >
+        ×
+      </button>
       <!-- Border Segments (Custom right border with gap for button) -->
       <div
         class="absolute right-0 top-0 w-px bg-transparent"
@@ -78,10 +91,11 @@ export class MobileNavBar extends LitElement {
       ></div>
 
       <div
-        class="flex-1 w-full flex flex-col justify-start overflow-y-auto lg:pt-[clamp(1rem,3vh,4rem)] lg:pb-[clamp(0.5rem,2vh,2rem)] lg:px-[clamp(1rem,1.5vw,2rem)] pt-4 pb-4 px-5 gap-4 lg:gap-[clamp(1rem,3vh,3rem)]"
+        class="mobile-nav-content flex-1 w-full flex flex-col justify-start overflow-y-auto lg:pt-[clamp(1rem,3vh,4rem)] lg:pb-[clamp(0.5rem,2vh,2rem)] lg:px-[clamp(1rem,1.5vw,2rem)] pt-4 pb-4 px-5 gap-4 lg:gap-[clamp(1rem,3vh,3rem)]"
       >
         <!-- Logo + Menu -->
         <div
+          data-sidebar-logo
           class="flex flex-col text-malibu-blue mb-4 ml-[clamp(0.2rem,0.4vw,0.4vh)]"
         >
           <div class="flex flex-col items-center gap-1">

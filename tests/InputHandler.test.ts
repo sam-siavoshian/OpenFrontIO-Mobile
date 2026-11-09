@@ -2063,6 +2063,7 @@ describe("mobile tap-preview placement", () => {
     down(100, 100, 1);
     down(140, 140, 2);
     up(100, 100, 1);
+    up(140, 140, 2);
     expect(placements).toEqual([]);
 
     // The next independent tap still places.
@@ -2100,6 +2101,7 @@ describe("mobile tap-preview placement", () => {
     down(100, 100, 1);
     down(140, 140, 2);
     up(100, 100, 1);
+    up(140, 140, 2);
     expect(touches).toEqual([]);
 
     down(200, 200, 3);
@@ -2137,6 +2139,7 @@ describe("mobile tap-preview placement", () => {
     down(100, 100, 1);
     down(140, 140, 2);
     up(200, 200, 1);
+    up(140, 140, 2);
     expect(touches).toEqual([]);
 
     // The next separate tap still acts on the map.
@@ -2173,6 +2176,7 @@ describe("mobile tap-preview placement", () => {
     down(100, 100, 1);
     down(140, 140, 2);
     up(140, 140, 2);
+    up(100, 100, 1);
     expect(placements).toEqual([]);
 
     // The next separate tap still places the preview.

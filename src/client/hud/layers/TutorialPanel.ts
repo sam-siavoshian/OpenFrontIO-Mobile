@@ -99,6 +99,7 @@ export class TutorialPanel extends LitElement implements Controller {
 
   @state() private active = false;
   @state() private confirmingClose = false;
+  @state() private hintExpanded = false;
   @state() private ctx: TutorialContext | null = null;
 
   private progress = new TutorialProgress();
@@ -441,9 +442,35 @@ export class TutorialPanel extends LitElement implements Controller {
   render() {
     if (!this.active) return nothing;
     return html`
+      <div class="mobile-tutorial-summary" dir=${textDirection()}>
+        <button
+          type="button"
+          aria-expanded=${this.hintExpanded}
+          aria-controls="tutorial-details"
+          @click=${() => {
+            this.hintExpanded = !this.hintExpanded;
+          }}
+        >
+          <span
+            >${translateText(this.hintExpanded ? "mobile_controls.hide_tip" : "mobile_controls.show_tip")}</span
+          >
+          <span class="mobile-tip-progress"
+            >${
+              this.ctx && !this.progress.finished()
+                ? translateText("tutorial.step_counter", {
+                    current: this.progress.position(this.ctx),
+                    total: this.progress.total(this.ctx),
+                  })
+                : ""
+            }</span
+          >
+          <span aria-hidden="true">${this.hintExpanded ? "⌄" : "⌃"}</span>
+        </button>
+      </div>
       <div
+        id="tutorial-details"
         dir=${textDirection()}
-        class="pointer-events-auto w-full sm:rounded-lg bg-gray-800/92 backdrop-blur-sm shadow-lg text-white text-base p-2 sm:mb-1"
+        class="tutorial-detail ${this.hintExpanded ? "is-expanded" : ""} pointer-events-auto w-full sm:rounded-lg bg-gray-800/92 backdrop-blur-sm shadow-lg text-white text-base p-2 sm:mb-1"
         @contextmenu=${(e: MouseEvent) => e.preventDefault()}
       >
         <div class="flex items-center justify-between gap-2 mb-1">

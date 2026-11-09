@@ -1119,7 +1119,7 @@ export class PlayerPanel extends LitElement implements Controller {
         @click=${() => this.hide()}
       >
         <div
-          class="pointer-events-auto max-h-[90vh] min-w-75 max-w-100 px-4 py-2"
+          class="pointer-events-auto max-h-[calc(100dvh-16px)] w-[min(400px,calc(100vw-16px))] min-w-0 max-w-full px-2 py-2"
           @click=${(e: MouseEvent) => e.stopPropagation()}
         >
           <div class="relative">
@@ -1132,7 +1132,7 @@ export class PlayerPanel extends LitElement implements Controller {
             >
               <div class="overflow-visible">
                 <div
-                  class="overflow-auto [-webkit-overflow-scrolling:touch] resize-y max-h-[calc(100vh-120px-env(safe-area-inset-bottom))]"
+                  class="overflow-auto [-webkit-overflow-scrolling:touch] resize-y max-h-[calc(100dvh-40px-env(safe-area-inset-top)-env(safe-area-inset-bottom))]"
                 >
                   <div class="sticky top-0 z-20 flex justify-end p-2">
                     <button

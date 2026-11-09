@@ -9,6 +9,7 @@ import { PauseGameIntentEvent } from "src/client/Transport";
 import { responseHasLinkedIdentity } from "../../AccountIdentity";
 import { ClientEnv } from "../../ClientEnv";
 import { Controller } from "../../Controller";
+import { showInGameConfirm } from "../../InGameModal";
 import {
   AlternateViewEvent,
   ToggleRenderDebugGuiEvent,
@@ -274,9 +275,22 @@ export class SettingsModal extends LitElement implements Controller {
     `;
   }
 
-  private onExitButtonClick() {
-    // redirect to the home page
-    window.location.href = homeHref();
+  private exitPending = false;
+
+  private async onExitButtonClick() {
+    if (this.exitPending) return;
+    this.exitPending = true;
+    try {
+      if (this.game?.myPlayer()?.isAlive() || this.game?.inSpawnPhase()) {
+        const confirmed = await showInGameConfirm(
+          translateText("help_modal.exit_confirmation"),
+        );
+        if (!confirmed) return;
+      }
+      window.location.href = homeHref();
+    } finally {
+      this.exitPending = false;
+    }
   }
 
   private renderModifiers() {
@@ -325,7 +339,7 @@ export class SettingsModal extends LitElement implements Controller {
         @contextmenu=${(e: Event) => e.preventDefault()}
       >
         <div
-          class="bg-slate-800 border border-slate-600 rounded-lg max-w-md w-full max-h-[80vh] overflow-y-auto"
+          class="bg-slate-800 border border-slate-600 rounded-lg max-w-md w-full max-h-[calc(100dvh-24px-env(safe-area-inset-top)-env(safe-area-inset-bottom))] overflow-y-auto"
         >
           <div
             class="flex items-center justify-between p-4 border-b border-slate-600"

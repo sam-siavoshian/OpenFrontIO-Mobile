@@ -70,3 +70,46 @@ describe("UsernameInput validation error", () => {
     expect(el.validationError).toBe("");
   });
 });
+
+describe("UsernameInput mobile keyboard", () => {
+  it("dismisses the keyboard on Done without changing the saved name", async () => {
+    const el = await mount();
+    const input = el.querySelector<HTMLInputElement>(
+      'input[aria-label="username.enter_username"]',
+    )!;
+    input.value = "MobilePlayer";
+    input.dispatchEvent(new Event("input"));
+    await el.updateComplete;
+    input.focus();
+
+    const done = new KeyboardEvent("keydown", {
+      key: "Enter",
+      bubbles: true,
+      cancelable: true,
+    });
+    input.dispatchEvent(done);
+
+    expect(done.defaultPrevented).toBe(true);
+    expect(document.activeElement).not.toBe(input);
+    expect(localStorage.getItem("username")).toBe("MobilePlayer");
+    expect(el.canPlay()).toBe(true);
+  });
+
+  it("keeps the editor focused while an IME confirms composed text", async () => {
+    const el = await mount();
+    const input = el.querySelector<HTMLInputElement>(
+      'input[aria-label="username.enter_username"]',
+    )!;
+    input.focus();
+    const composing = new KeyboardEvent("keydown", {
+      key: "Enter",
+      isComposing: true,
+      bubbles: true,
+      cancelable: true,
+    });
+    input.dispatchEvent(composing);
+
+    expect(composing.defaultPrevented).toBe(false);
+    expect(document.activeElement).toBe(input);
+  });
+});
