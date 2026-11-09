@@ -427,7 +427,7 @@ export class ControlPanel extends LitElement implements Controller {
             : nothing
         }
         <div
-          class="absolute inset-0 flex items-center justify-between px-1.5 text-xs font-bold leading-none pointer-events-none"
+          class="mobile-troop-counts absolute inset-0 flex items-center justify-between px-1.5 text-xs font-bold leading-none pointer-events-none"
           translate="no"
         >
           <span class="text-white drop-shadow-[0_1px_1px_rgba(0,0,0,0.8)]"
@@ -438,7 +438,7 @@ export class ControlPanel extends LitElement implements Controller {
           >
         </div>
         <div
-          class="absolute inset-0 flex items-center justify-center pointer-events-none"
+          class="mobile-troop-rate absolute inset-0 flex items-center justify-center pointer-events-none"
           translate="no"
         >
           <div
