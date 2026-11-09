@@ -339,7 +339,7 @@ export class SettingsModal extends LitElement implements Controller {
         @contextmenu=${(e: Event) => e.preventDefault()}
       >
         <div
-          class="bg-slate-800 border border-slate-600 rounded-lg max-w-md w-full max-h-[80vh] overflow-y-auto"
+          class="bg-slate-800 border border-slate-600 rounded-lg max-w-md w-full max-h-[calc(100dvh-24px-env(safe-area-inset-top)-env(safe-area-inset-bottom))] overflow-y-auto"
         >
           <div
             class="flex items-center justify-between p-4 border-b border-slate-600"

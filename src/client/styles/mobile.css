@@ -440,3 +440,113 @@
     top: auto;
   }
 }
+
+.mobile-sidebar-close {
+  display: none;
+}
+@media (pointer: coarse), (max-width: 767px) {
+  /* Keep touch areas usable even when browser toolbars shorten the viewport. */
+  button {
+    min-width: 44px;
+    min-height: 44px;
+  }
+  #sidebar-menu {
+    height: 100dvh;
+    padding-top: env(safe-area-inset-top);
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+  .mobile-sidebar-close {
+    display: grid;
+    place-items: center;
+    position: absolute;
+    top: max(8px, env(safe-area-inset-top));
+    right: 8px;
+    z-index: 2;
+    width: 44px;
+    height: 44px;
+    border-radius: 10px;
+    background: #24394b;
+    color: white;
+    font-size: 24px;
+  }
+  [data-sidebar-logo] {
+    padding-inline-end: 40px;
+  }
+  [data-sidebar-logo] img {
+    max-width: min(180px, 100%);
+  }
+  .mobile-floating-overlay {
+    padding: max(8px, env(safe-area-inset-top))
+      max(8px, env(safe-area-inset-right)) max(8px, env(safe-area-inset-bottom))
+      max(8px, env(safe-area-inset-left));
+    align-items: center;
+  }
+  .mobile-floating-shell {
+    max-width: calc(
+      100vw - 16px - env(safe-area-inset-left) - env(safe-area-inset-right)
+    );
+    min-width: 0;
+  }
+  .mobile-floating-panel {
+    max-width: 100%;
+    max-height: calc(
+      100dvh - 16px - env(safe-area-inset-top) - env(safe-area-inset-bottom)
+    );
+    overscroll-behavior: contain;
+  }
+  .mobile-floating-close {
+    top: 4px;
+    right: 4px;
+    width: 44px;
+    height: 44px;
+  }
+  .mobile-floating-header {
+    padding-inline-end: 44px;
+    min-height: 40px;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+  emoji-table .mobile-floating-panel > section:nth-of-type(-n + 2) > h3 {
+    min-height: 36px;
+    padding-inline-end: 40px;
+    display: flex;
+    align-items: center;
+  }
+  .mobile-resource-panel {
+    scrollbar-gutter: stable;
+  }
+}
+@media (pointer: coarse) and (max-height: 500px) {
+  .mobile-nav-content {
+    gap: 4px;
+    padding-top: 8px;
+    padding-bottom: 8px;
+  }
+  [data-sidebar-logo] {
+    margin-bottom: 4px;
+  }
+  [data-sidebar-logo] img {
+    max-height: 32px;
+  }
+}
+
+@media (pointer: coarse) and (max-width: 600px) and (min-height: 501px) {
+  /* The stats occupy the first row. Keep every action reachable below it. */
+  #game-top-actions {
+    top: calc(64px + env(safe-area-inset-top));
+    right: calc(64px + env(safe-area-inset-right));
+    max-width: calc(
+      100vw - 124px - env(safe-area-inset-left) - env(safe-area-inset-right)
+    );
+  }
+  #game-top-actions game-right-sidebar aside {
+    max-width: 100%;
+    flex-wrap: wrap;
+  }
+  game-left-sidebar > aside {
+    top: calc(64px + env(safe-area-inset-top));
+    max-height: calc(
+      100dvh - 254px - env(safe-area-inset-top) - env(safe-area-inset-bottom)
+    );
+  }
+}

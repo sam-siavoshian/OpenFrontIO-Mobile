@@ -57,7 +57,22 @@ export class TransformHandler {
   }
 
   public updateCanvasBoundingRect() {
-    this._boundingRect = this.canvas.getBoundingClientRect();
+    const next = this.canvas.getBoundingClientRect();
+    const previous = this._boundingRect;
+    if (
+      previous.width > 0 &&
+      previous.height > 0 &&
+      next.width > 0 &&
+      next.height > 0
+    ) {
+      // Rotating a phone must keep the same world point under the viewport center.
+      this.offsetX += (previous.width - next.width) / (2 * this.scale);
+      this.offsetY += (previous.height - next.height) / (2 * this.scale);
+    }
+    if (previous.width !== next.width || previous.height !== next.height) {
+      this.changed = true;
+    }
+    this._boundingRect = next;
   }
 
   boundingRect(): DOMRect {

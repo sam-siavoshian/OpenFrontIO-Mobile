@@ -558,7 +558,7 @@ export class SendResourceModal extends LitElement {
           @keydown=${this.handleKeydown}
         >
           <div
-            class="rounded-2xl bg-zinc-900 p-5 shadow-2xl ring-1 ring-zinc-800 max-h-[90vh] text-zinc-200"
+            class="mobile-resource-panel rounded-2xl bg-zinc-900 p-5 shadow-2xl ring-1 ring-zinc-800 max-h-[calc(100dvh-32px-env(safe-area-inset-top)-env(safe-area-inset-bottom))] overflow-y-auto overscroll-contain text-zinc-200"
             @click=${(e: MouseEvent) => e.stopPropagation()}
           >
             ${this.renderHeader()} ${this.renderAvailable()}

@@ -8,6 +8,7 @@ export function closeMobileSidebar() {
     backdrop?.classList.remove("open");
     document.documentElement.classList.remove("overflow-hidden");
     sidebar.setAttribute("aria-hidden", "true");
+    sidebar.removeAttribute("aria-modal");
     backdrop?.setAttribute("aria-hidden", "true");
     const hb = document.getElementById("hamburger-btn");
     if (hb) hb.setAttribute("aria-expanded", "false");

@@ -114,24 +114,25 @@ export class EmojiTable extends LitElement {
 
     return html`
       <div
-        class="fixed inset-0 bg-black/15 backdrop-brightness-110 flex items-start sm:items-center justify-center z-10002 pt-4 sm:pt-0"
+        class="mobile-floating-overlay fixed inset-0 bg-black/15 backdrop-brightness-110 flex items-start sm:items-center justify-center z-10002 pt-4 sm:pt-0"
         @click=${this.handleBackdropClick}
         @dragover=${this.dragOverElsewhere}
         @drop=${this.dropElsewhere}
       >
-        <div class="relative">
+        <div class="mobile-floating-shell relative">
           <!-- Close button -->
           <button
-            class="absolute -top-3 -right-3 w-7 h-7 flex items-center justify-center
+            class="mobile-floating-close absolute -top-3 -right-3 w-7 h-7 flex items-center justify-center
                     bg-zinc-700 hover:bg-red-500 text-white rounded-full shadow-sm transition-colors z-10004"
+            aria-label=${translateText("common.close")}
             @click=${this.hideTable}
           >
             ✕
           </button>
 
           <div
-            class="bg-zinc-900/95 p-3 rounded-xl z-10003 shadow-2xl shadow-black/50 ring-1 ring-white/10
-                   max-w-[calc(100vw-32px)] max-h-[calc(100vh-60px)] overflow-y-auto
+            class="mobile-floating-panel bg-zinc-900/95 p-3 rounded-xl z-10003 shadow-2xl shadow-black/50 ring-1 ring-white/10
+                   max-w-[calc(100vw-32px)] max-h-[calc(100dvh-32px)] overflow-y-auto
                    flex flex-col gap-3"
             @contextmenu=${(e: MouseEvent) => e.preventDefault()}
             @wheel=${(e: WheelEvent) => e.stopPropagation()}
